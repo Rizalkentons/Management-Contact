@@ -1,22 +1,31 @@
  #"Program Manajemen kontak"
+def membuka_kontak(path='kontak.txt'):
+    with open(path, mode='r') as file:
+        kontak = file.readlines()
+    return kontak
+
+def menyimpan_kontak(path='kontak.txt', isi=[]):
+    with open(path, mode='w') as file:
+        file.writelines(isi)
+        
 class Kontak:
     def __init__ (self):
-        self.kontak = []
+        self.kontak = membuka_kontak()
 
     def melihat_kontak(self):
         # melihat semua kontak
         if self.kontak:
             for num, item in enumerate(self.kontak, start=1):
-                print(f'{num}. {item["nama"]} ({item["hp"]} , {item["email"]})')
+                print(f'{num}. ' + item)
         else:
             print("kontak masih kosong")
             return 1
 
     def menambah_kontak(self):
         nama = input("Masukan nama kontak yang baru: ")
-        hp = input("Masukan nomor kontak yang baru: ")
+        HP = input("Masukan nomor kontak yang baru: ")
         email = input("Masukan email kontak yang baru: ")
-        kontak_baru = {'nama': nama, 'hp': hp, 'email': email}
+        kontak_baru = f'{nama} ({HP}, {email})' + '\n'
         self.kontak.append(kontak_baru)
         print("Kontak baru berhasil di tambahkan")
 
@@ -25,9 +34,15 @@ class Kontak:
         if self.melihat_kontak() == 1:
             return
         else:
-            i_hapus = int(input("Masukan nomor kontak yang mau di hapus: "))
-            del self.kontak[i_hapus - 1]
-            print("Kontak berhasil di hapus")
+            try:
+                i_hapus = int(input("Masukan nomor kontak yang mau di hapus: "))
+                del self.kontak[i_hapus - 1]
+                print("Kontak berhasil di hapus")
+            except:
+                print("anda memasukan pilihan yang salah, masukan angka,bukan abjad atau karakter lain")
+            
+    def keluar_kontak(self):
+        menyimpan_kontak(isi=self.kontak)
 
 kontak_kantor = Kontak()
 
@@ -51,10 +66,8 @@ while True:
 
     elif pilihan == '4':
         # keluar dari kontak
+        kontak_kantor.keluar_kontak()
         break
     else:
         print("Maaf,nomor yang anda masukan tidak ada di menu kontak")
-
-
-
 
